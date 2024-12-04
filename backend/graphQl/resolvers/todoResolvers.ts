@@ -65,7 +65,7 @@ export const todoResolvers = {
                     data: {
                         todo,
                         description,
-                        isPending,
+                        isPending
                     },
                 });
                 return updatedTodo;
@@ -74,14 +74,14 @@ export const todoResolvers = {
             }
         },
 
-        deleteTodo: async (_: unknown, { id }: { id: string }) => {
+        deleteTodo: async (_: unknown, { id }: GetTodosArgs) => {
             try {
                 const deletedTodo = await prisma.todoList.delete({
                     where: {
                         id: id,
                     },
                 });
-                return deletedTodo;
+                return true;
             } catch (error) {
                 throw new GraphQLError((error as Error).message);
             }

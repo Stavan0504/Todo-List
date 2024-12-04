@@ -36,8 +36,8 @@ export const typeDefs = `#graphql
     signUp(name: String!, email: String!, password: String!): User!
     signIn(email: String!, password: String!): AuthPayload!
     signOut: SignOutResponse!
-    createTodo(todo: String!, description: String!, userId: ID!): Todo!
-    updateTodo(id: ID!, isPending: Boolean!): Todo!
+    createTodo(todo: String!, description: String!, authorId: ID!): Todo!
+    updateTodo(id: ID!, todo: String!, description: String!, isPending: Boolean!): Todo!
     deleteTodo(id: ID!): Boolean!
   }
 `;

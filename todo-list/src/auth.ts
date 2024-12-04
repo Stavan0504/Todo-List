@@ -21,34 +21,6 @@ export const { handlers, auth, signOut, signIn } = NextAuth(
             return null; // Return null for missing credentials
           }
 
-          // try {
-          //   const response = await axios.post(
-          //     `${process.env.API_URL || "http://localhost:3000"}/api/signin`,
-          //     { email, password },
-          //     {
-          //       headers: { "Content-Type": "application/json" },
-          //     }
-          //   );
-
-          //   // Extract user data from response
-          //   const user = response.data.user;
-
-
-          //   // Validate response and user structure
-          //     if (response.status === 200 && user && user.email && user.id) {
-          //       return {
-          //         name: user.username,
-          //         email: user.email,
-          //         id: user.id
-          //       }; // Return user on successful authentication
-          //   } 
-          //     else {
-          //       console.warn("Unexpected response structure:", response);
-          //       return null;
-          //   }
-          // } 
-
-
           try {
             const { data } = await client.mutate({
               mutation: SIGN_IN,
@@ -117,6 +89,7 @@ export const { handlers, auth, signOut, signIn } = NextAuth(
     },
     session: {
       strategy: "jwt",
+
     },
     debug: process.env.NODE_ENV === "development",
   })

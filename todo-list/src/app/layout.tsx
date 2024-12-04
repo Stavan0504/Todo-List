@@ -1,12 +1,12 @@
 "use client";
 
-import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react"
 import { ApolloProvider } from "@apollo/client";
 import client from "@/lib/apolloClient";
 import Navbar from "@/components/Navbar";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 
 const geistSans = localFont({
@@ -28,19 +28,19 @@ const geistMono = localFont({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <SessionProvider>
-        <ApolloProvider client={client}>
-        
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
-          >
+
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+      >
+        <SessionProvider>
+          <ApolloProvider client={client}>
             <Navbar />
-              <div className="container mx-auto px-4 flex flex-col min-h-screen">
-                {children}
-              </div>
-          </body>
-        </ApolloProvider>
-      </SessionProvider>
+            <div className="container mx-auto px-4 flex flex-col min-h-screen">
+              {children}
+            </div>
+          </ApolloProvider>
+        </SessionProvider>
+      </body>
     </html>
   );
 }

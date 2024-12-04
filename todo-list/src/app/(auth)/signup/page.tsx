@@ -25,7 +25,6 @@ type Inputs = {
 
 export default function Signup() {
     const router = useRouter();
-    // const [error, setError] = useState(" "); 
     const [isMounted, setIsMounted] = useState(false);
 
     // This will ensure we only render client-side after the initial SSR
@@ -34,23 +33,6 @@ export default function Signup() {
     }, []);
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        // try {
-        //     const response = await axios.post("http://localhost:3000/api/signup", {
-        //         name: data.Username,
-        //         password: data.Password,
-        //         email: data.Email
-        //     }, 
-        //     { 
-        //         headers: { "Content-Type": "application/json" } 
-        //     });
-
-        //     alert("User has been registered successfully");
-        //     router.push("/signin");
-        // } 
-        // catch (error) {
-        //     // setError('Email already exists'); // Set error message on failure
-        //     alert("Email already exists");
-        // }
 
         try {
             const { data: any } = await client.mutate({
