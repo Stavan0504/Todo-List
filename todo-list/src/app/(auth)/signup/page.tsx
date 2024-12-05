@@ -14,8 +14,8 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { SIGN_UP } from "@/app/graphQl/mutations/userMutations";
-import client from "@/lib/apolloClient";
+import { useMutation } from "@tanstack/react-query";
+import SignUpUser from "@/lib/signUpUser";
 
 type Inputs = {
     Username: string;
@@ -23,6 +23,11 @@ type Inputs = {
     Password: string;
 };
 
+type SignUp = {
+    name: string;
+    email: string;
+    password: string;
+}
 export default function Signup() {
     const router = useRouter();
     const [isMounted, setIsMounted] = useState(false);
@@ -32,35 +37,25 @@ export default function Signup() {
         setIsMounted(true);
     }, []);
 
+
+    const { mutate: signUp } = useMutation ({
+        mutationFn: ({ name, email, password }: SignUp) =>
+            SignUpUser(name, email, password),
+
+        onSuccess: () => {
+          alert("User has been registered successfully");
+          router.push("/signin");
+        },
+        onError: (error: any) => {
+          console.error("Error in mutation:", error);
+          alert(
+            error.response?.data?.message || "Failed to sign up. Please try again."
+          );
+        },
+      });
+
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
-
-        try {
-            const { data: any } = await client.mutate({
-                mutation: SIGN_UP,
-                variables: {
-                    name: data.Username,
-                    email: data.Email,
-                    password: data.Password,
-                },
-            });
-
-            alert("User has been registered successfully");
-            router.push("/signin");
-        }
-        catch (error: any) {
-            if (error.networkError) {
-                console.error("Network Error:", error.networkError);
-                alert("Network error occurred. Please try again later.");
-            }
-            else if (error.graphQLErrors) {
-                console.error("GraphQL Errors:", error.graphQLErrors);
-                alert(error.graphQLErrors[0]?.message || "Signup failed");
-            } 
-            else {
-                console.error("Unexpected Error:", error);
-                alert("An unexpected error occurred. Please try again.");
-            }
-        }
+        signUp({ name: data.Username, email: data.Email, password: data.Password });
     };
 
     const {

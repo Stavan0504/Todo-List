@@ -7,6 +7,7 @@ import { ApolloProvider } from "@apollo/client";
 import client from "@/lib/apolloClient";
 import Navbar from "@/components/Navbar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 
 const geistSans = localFont({
@@ -26,6 +27,7 @@ const geistMono = localFont({
 // };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const queryClient  = new QueryClient()
   return (
     <html lang="en" suppressHydrationWarning>
 
@@ -34,10 +36,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       >
         <SessionProvider>
           <ApolloProvider client={client}>
+           <QueryClientProvider client={queryClient}>
             <Navbar />
             <div className="container mx-auto px-4 flex flex-col min-h-screen">
               {children}
             </div>
+            <ReactQueryDevtools initialIsOpen={false} />
+           </QueryClientProvider>
           </ApolloProvider>
         </SessionProvider>
       </body>

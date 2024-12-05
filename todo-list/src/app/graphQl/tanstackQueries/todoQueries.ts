@@ -1,6 +1,4 @@
-import { gql } from '@apollo/client';
-
-export const GET_TODOS = gql`
+export const GET_TODOS =`
   query GetTodos {
     getTodos {
       id
@@ -15,7 +13,7 @@ export const GET_TODOS = gql`
   }
 `;
 
-export const GET_TODO = gql`
+export const GET_TODO =`
   query GetTodo($id: ID!) {
     getTodo(id: $id) {
       id
@@ -30,7 +28,7 @@ export const GET_TODO = gql`
   }
 `;
 
-export const GET_USER_TODOS =gql`
+export const GET_USER_TODOS =`
   query GetUserTodos($userId: ID!) {
     getUserTodos(userId: $userId) {
       id
