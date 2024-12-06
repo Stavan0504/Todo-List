@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -38,19 +39,25 @@ export default function Signup() {
     }, []);
 
 
-    const { mutate: signUp } = useMutation ({
-        mutationFn: ({ name, email, password }: SignUp) =>
-            SignUpUser(name, email, password),
-
+    const { mutate: signUp } = useMutation({
+        mutationFn: async ({ name, email, password }: SignUp) => {
+          try {
+            const result = await SignUpUser(name, email, password);
+            if(result.errors[0].message=="User already exists"){
+             throw new Error(result.errors[0].message)
+                // console.log(result.errors)
+            }
+          } catch (error: any) {
+            // Throw the error so `onError` catches it
+            throw error;
+          }
+        },
         onSuccess: () => {
           alert("User has been registered successfully");
           router.push("/signin");
         },
         onError: (error: any) => {
-          console.error("Error in mutation:", error);
-          alert(
-            error.response?.data?.message || "Failed to sign up. Please try again."
-          );
+            alert(error.message)
         },
       });
 

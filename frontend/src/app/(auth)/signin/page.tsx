@@ -19,11 +19,12 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 
-export default function signin() {
+export default function Signin() {
     const router = useRouter();
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [isMounted, setIsMounted] = useState(false); // Flag to indicate client-side render
+    const [error, setError] = useState("");
 
     useEffect(() => {
         setIsMounted(true);
@@ -39,11 +40,12 @@ export default function signin() {
             password,
             redirect: false, // Ensures client-side result handling
         })
-        
+        if(result?.error ==""){
+            setError(result.error)
+        }
         if (result?.ok) {
             router.push("/"); // Redirect to a secure page after success
-        } else {
-            console.error("Sign-in failed:", result?.error || "Unknown error");
+        } if(result?.error) {
             alert("Invalid email or password");
         }
     }
@@ -85,6 +87,7 @@ export default function signin() {
                         </CardFooter>
                     </Card>
                 </TabsContent>
+                {error && <p className="text-red-500 text-sm">{error}</p>}
             </Tabs>
         </div>
     )

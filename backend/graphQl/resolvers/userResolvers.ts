@@ -68,13 +68,17 @@ export const userResolvers = {
                         email: email,
                         password: hashedPassword,
                     },
+                    select:{
+                        id:true,
+                        username:true,
+                        email:true
+                    }
                 });
 
-                return user;
+                return {user};
 
             } catch (error) {
-                console.error('Error during registration:', error);
-                throw new GraphQLError('An error occurred during registration');
+                throw new GraphQLError(error instanceof Error ? error.message : String(error));
             }
         },
 

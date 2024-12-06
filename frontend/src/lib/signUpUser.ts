@@ -19,10 +19,11 @@ async function SignUpUser(name: string, email: string, password: string) {
         })
 
         const result = await response.json()
-        return result.data
+        return result
     } 
     catch (error) {
         console.log("Error in Signing Up", error)
+        return error
     }
 }
 

@@ -3,8 +3,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react"
-import { ApolloProvider } from "@apollo/client";
-import client from "@/lib/apolloClient";
 import Navbar from "@/components/Navbar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -35,7 +33,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
       >
         <SessionProvider>
-          <ApolloProvider client={client}>
            <QueryClientProvider client={queryClient}>
             <Navbar />
             <div className="container mx-auto px-4 flex flex-col min-h-screen">
@@ -43,7 +40,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
             <ReactQueryDevtools initialIsOpen={false} />
            </QueryClientProvider>
-          </ApolloProvider>
         </SessionProvider>
       </body>
     </html>

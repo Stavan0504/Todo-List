@@ -1,8 +1,7 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { SIGN_IN } from "./app/graphQl/mutations/userMutations";
-import client from "./lib/apolloClient";
+import { SIGN_IN } from "./app/graphQl/tanstackMutations/userMutations";
 
 export const { handlers, auth, signOut, signIn } = NextAuth(
   {
@@ -22,10 +21,19 @@ export const { handlers, auth, signOut, signIn } = NextAuth(
           }
 
           try {
-            const { data } = await client.mutate({
-              mutation: SIGN_IN,
-              variables: { email, password },
+            const response = await fetch('http://localhost:4000/graphql',{
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                query: SIGN_IN,
+                variables: { email, password }
+              })
             });
+
+            const { data } = await response.json();
+
 
             const { user, token } = data?.signIn || {};
 
@@ -44,18 +52,9 @@ export const { handlers, auth, signOut, signIn } = NextAuth(
             }
           }
 
-          catch (error: any) {
-            if (error.networkError) 
-              {
-              console.error("Network error:", error.networkError);
-            } 
-            else if (error.graphQLErrors) {
-              console.error("GraphQL errors:", error.graphQLErrors);
-            } 
-            else {
-              console.error("Unexpected error:", error);
-            }
-            return null;
+          catch (error: unknown) {
+           console.log(error);
+           return null
           }
         }
       }),
@@ -91,5 +90,5 @@ export const { handlers, auth, signOut, signIn } = NextAuth(
       strategy: "jwt",
 
     },
-    debug: process.env.NODE_ENV === "development",
+    trustHost: process.env.NODE_ENV === "production"?true:true
   })
